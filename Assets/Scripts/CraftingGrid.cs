@@ -1,3 +1,5 @@
+using NUnit.Framework;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -6,6 +8,8 @@ using UnityEngine;
 public class CraftingGrid : MonoBehaviour
 {
     private GridSlot[,] gridObjects = new GridSlot[5, 5];
+
+    public static CraftingGrid Instance;
 
     void Awake()
     {
@@ -16,5 +20,13 @@ public class CraftingGrid : MonoBehaviour
                 gridObjects[i, j] = transform.GetChild(i).GetChild(j).GetComponent<GridSlot>();
             }
         }
+
+        Instance = this;
+    }
+
+    public GridSlot GetFreeGridSlot()
+    {
+        GridSlot[] freeSlots = gridObjects.Cast<GridSlot>().Where(g => g.HasItem() == false).ToArray();
+        return freeSlots[Random.Range(0, gridObjects.Length)];
     }
 }

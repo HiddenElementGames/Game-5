@@ -33,7 +33,7 @@ public class GridSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
 		// set the sprite
 		itemImage.enabled = true;
-		itemImage.sprite = currentItem.itemSprite;
+		itemImage.sprite = currentItem.ItemSprite;
         if(itemImage.type == Image.Type.Simple)
         {
 			itemImage.preserveAspect = true;

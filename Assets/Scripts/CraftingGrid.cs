@@ -27,6 +27,6 @@ public class CraftingGrid : MonoBehaviour
     public GridSlot GetFreeGridSlot()
     {
         GridSlot[] freeSlots = gridObjects.Cast<GridSlot>().Where(g => g.HasItem() == false).ToArray();
-        return freeSlots[Random.Range(0, gridObjects.Length)];
+        return freeSlots[Random.Range(0, freeSlots.Length)];
     }
 }

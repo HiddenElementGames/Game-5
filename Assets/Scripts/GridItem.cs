@@ -7,4 +7,5 @@ public class GridItem : ScriptableObject
 	public Sprite ItemSprite;
 	public ItemType Item;
 	public CraftType Craft;
+	public GridItem CraftItem;
 }

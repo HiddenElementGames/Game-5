@@ -10,11 +10,14 @@ using UnityEngine.UI;
 /// </summary>
 public class GridSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    private GridItem currentItem = null;
+    public GridItem Item = null;
 
     private Image itemImage;
 
     private Button gridButton;
+
+    public int X;
+    public int Y;
 
 	private void Awake()
     {
@@ -24,16 +27,16 @@ public class GridSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     public bool HasItem()
     {
-        return currentItem != null;
+        return Item != null;
     }
 
     public void SetItem(GridItem item)
     {
-        currentItem = item;
+        Item = item;
 
 		// set the sprite
 		itemImage.enabled = true;
-		itemImage.sprite = currentItem.ItemSprite;
+		itemImage.sprite = Item.ItemSprite;
         if(itemImage.type == Image.Type.Simple)
         {
 			itemImage.preserveAspect = true;
@@ -41,18 +44,18 @@ public class GridSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
         // enable the grid button
         gridButton.enabled = true;
-
+        StartCoroutine(CraftingGrid.Instance.CheckForCombo(this));
 	}
 
     public void SwapItem(GridSlot slot, GridItem item)
     {
-        slot.SetItem(currentItem);
+        slot.SetItem(Item);
         SetItem(item);
     }
 
     public void RemoveItem()
     {
-        currentItem = null;
+        Item = null;
         itemImage.sprite = null;
         itemImage.enabled = false;
         gridButton.enabled = false;
@@ -65,7 +68,7 @@ public class GridSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (currentItem != null)
+        if (Item != null)
         {
             itemImage.transform.position = eventData.position;
         }
@@ -73,7 +76,7 @@ public class GridSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        if (currentItem == null) return;
+        if (Item == null) return;
 
         List<RaycastResult> results = new();
         GraphicRaycaster raycaster = FindAnyObjectByType<GraphicRaycaster>();
@@ -83,11 +86,11 @@ public class GridSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             GridSlot slot = results.Where(r => r.gameObject.CompareTag("GridSlot")).First().gameObject.GetComponent<GridSlot>();
             if(slot.HasItem())
             {
-                slot.SwapItem(this, currentItem);
+                slot.SwapItem(this, Item);
             }
             else
             {
-                slot.SetItem(currentItem);
+                slot.SetItem(Item);
                 RemoveItem();
             }
         }

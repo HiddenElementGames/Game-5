@@ -29,4 +29,19 @@ public class CraftingGrid : MonoBehaviour
         GridSlot[] freeSlots = gridObjects.Cast<GridSlot>().Where(g => g.HasItem() == false).ToArray();
         return freeSlots[Random.Range(0, freeSlots.Length)];
     }
+
+    public void CheckForCombo()
+    {
+        for(int i = 0; i < gridObjects.GetLength(0); i++)
+        {
+            for(int j = 0; j < gridObjects.GetLength(1); j++)
+            {
+                GridSlot slot = gridObjects[i, j];
+                if(slot.HasItem())
+                {
+
+                }
+            }
+        }
+    }
 }

@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Temp Item 2
   m_EditorClassIdentifier: Assembly-CSharp::GridItem
   ItemSprite: {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
-  Item: 0
+  Item: 1
   Craft: 0
+  CraftItem: {fileID: 11400000, guid: 9b63d74b41e49394f83ba3bdfdc94227, type: 2}

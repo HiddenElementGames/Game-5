@@ -15,3 +15,4 @@ MonoBehaviour:
   ItemSprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
   Item: 0
   Craft: 0
+  CraftItem: {fileID: 11400000, guid: a9e9d7c60e03dd047a3edb938184e41d, type: 2}

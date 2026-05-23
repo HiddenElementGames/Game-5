@@ -8,6 +8,8 @@ using UnityEngine;
 /// </summary>
 public class CraftingGrid : MonoBehaviour
 {
+    [SerializeField] private List<Recipe> recipes;
+
     private GridSlot[,] gridObjects = new GridSlot[5, 5];
 
     public static CraftingGrid Instance;

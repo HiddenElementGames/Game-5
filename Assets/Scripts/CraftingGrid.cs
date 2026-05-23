@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using UnityEngine;
-using static UnityEditor.Searcher.Searcher.AnalyticsEvent;
 
 /// <summary>
 /// Tracks the location of each grid slot in the crafting grid
@@ -16,6 +14,14 @@ public class CraftingGrid : MonoBehaviour
 
     private int lastSelectedX = -1;
     private int lastSelectedY = -1;
+
+    private readonly Vector2Int[] Directions =
+    {
+        Vector2Int.left,
+        Vector2Int.right,
+        Vector2Int.up,
+        Vector2Int.right
+    };
 
     void Awake()
     {
@@ -41,122 +47,91 @@ public class CraftingGrid : MonoBehaviour
     public IEnumerator CheckForCombo(GridSlot slot)
     {
         yield return null;
+
         lastSelectedX = slot.X;
         lastSelectedY = slot.Y;
-        CraftType craft = slot.Item.Craft;
-        ItemType item = slot.Item.Item;
-        GridItem craftItem = slot.Item.CraftItem;
-        int x = slot.X;
-        int y = slot.Y;
 
-        if (craft == CraftType.Ore)
+        if(!slot.HasItem())
         {
-            List<GridSlot> validSlots = new();
-            validSlots.Add(slot);
-            validSlots = CheckNeighboringLocations(x, y, item, validSlots, true);
-
-            int minComboCount = 3;
-
-            if(validSlots.Count >= minComboCount)
-            {
-                foreach(GridSlot s in validSlots)
-                {
-                    Debug.Log($"Slot x:{s.X}, Slot y:{s.Y}");
-                }
-
-                for(int i = minComboCount - 1; i >=0; i--)
-                {
-                    validSlots[i].RemoveItem();
-                }
-                gridObjects[lastSelectedX, lastSelectedY].SetItem(craftItem);
-            }
+            yield break;
         }
 
+        List<GridSlot> connectedSlots = GetConnectedSlots(slot.X, slot.Y);
+
+        // temp code, combines 3 items
+        int minComboCount = 3;
+        if(connectedSlots.Count >= minComboCount)
+        {
+            GridItem craftedItem = slot.Item.CraftItem;
+
+            for(int i = 0; i < minComboCount; i++)
+            {
+                connectedSlots[i].RemoveItem();
+            }
+
+            gridObjects[lastSelectedX, lastSelectedY].SetItem(craftedItem);
+        }
     }
 
-    private List<GridSlot> CheckNeighboringLocations(int x, int y, ItemType item, List<GridSlot> currentSlots, bool initialLocation = false)
+    private List<GridSlot> GetConnectedSlots(int startX, int startY)
     {
-        List<GridSlot> validSlots = new();
-        if (initialLocation)
+        List<GridSlot> connectedSlots = new();
+        Queue<GridSlot> queuedSlots = new();
+        HashSet<GridSlot> visitedSlots = new();
+
+        GridSlot startSlot = gridObjects[startX, startY];
+
+        if(!startSlot.HasItem())
         {
-            validSlots.AddRange(currentSlots);
+            return connectedSlots;
         }
 
-        // check left
-        if (IsValidLocation(x - 1))
+        queuedSlots.Enqueue(startSlot);
+        visitedSlots.Add(startSlot);
+
+        while(queuedSlots.Count > 0)
         {
-            GridSlot slot = gridObjects[x - 1, y];
-            if (slot.HasItem() && slot.Item.Item == item && !validSlots.Contains(slot))
+            GridSlot currentSlot = queuedSlots.Dequeue();
+            connectedSlots.Add(currentSlot);
+
+            foreach(Vector2Int dir in Directions)
             {
-                validSlots.Add(slot);
-                if (initialLocation)
+                int newX = currentSlot.X + dir.x;
+                int newY = currentSlot.Y + dir.y;
+
+                if(!IsValidLocation(newX, newY))
                 {
-                    validSlots.AddRange(CheckNeighboringLocations(x - 1, y, item, validSlots));
+                    continue;
                 }
-            }
-        }
-        // check up
-        if (IsValidLocation(y - 1))
-        {
-            GridSlot slot = gridObjects[x, y - 1];
-            if (slot.HasItem() && slot.Item.Item == item && !validSlots.Contains(slot))
-            {
-                validSlots.Add(slot);
-                if (initialLocation)
+
+                GridSlot neighbor = gridObjects[newX, newY];
+
+                if(!neighbor.HasItem())
                 {
-                    validSlots.AddRange(CheckNeighboringLocations(x, y - 1, item, validSlots));
+                    continue;
                 }
-            }
-        }
-        // check down
-        if (IsValidLocation(y + 1))
-        {
-            GridSlot slot = gridObjects[x, y + 1];
-            if (slot.HasItem() && slot.Item.Item == item && !validSlots.Contains(slot))
-            {
-                validSlots.Add(slot);
-                if (initialLocation)
+
+                if(visitedSlots.Contains(neighbor))
                 {
-                    validSlots.AddRange(CheckNeighboringLocations(x, y + 1, item, validSlots));
+                    continue;
                 }
-            }
-        }
-        // check right
-        if (IsValidLocation(x + 1))
-        {
-            GridSlot slot = gridObjects[x + 1, y];
-            if (slot.HasItem() && slot.Item.Item == item && !validSlots.Contains(slot))
-            {
-                validSlots.Add(slot);
-                if (initialLocation)
+
+                // temp code, ensures the items are the same type
+                if(currentSlot.Item.Item != startSlot.Item.Item)
                 {
-                    validSlots.AddRange(CheckNeighboringLocations(x + 1, y, item, validSlots));
+                    continue;
                 }
+
+                visitedSlots.Add(neighbor);
+                queuedSlots.Enqueue(neighbor);
             }
         }
 
-        if(initialLocation)
-        {
-            // remove any duplicates
-            for(int i = validSlots.Count - 1; i >= 0; i--)
-            {
-                GridSlot slot = validSlots[i];
-                for(int j = validSlots.Count - 2; j >= 0; j--)
-                {
-                    if (slot.X == validSlots[j].X && slot.Y == validSlots[j].Y && i != j)
-                    {
-                        validSlots.RemoveAt(i);
-                        break;
-                    }
-                }
-            }
-        }
-
-        return validSlots;
+        return connectedSlots;
     }
 
-    private bool IsValidLocation(int value)
+    private bool IsValidLocation(int x, int y)
     {
-        return value >= 0 && value < 5;
+        return x >= 0 && y >= 0 && x < gridObjects.GetLength(0) && y < gridObjects.GetLength(1);
     }
 }

@@ -118,12 +118,6 @@ public class CraftingGrid : MonoBehaviour
                     continue;
                 }
 
-                // temp code, ensures the items are the same type
-                if(currentSlot.Item.Item != startSlot.Item.Item)
-                {
-                    continue;
-                }
-
                 visitedSlots.Add(neighbor);
                 queuedSlots.Enqueue(neighbor);
             }
@@ -135,5 +129,49 @@ public class CraftingGrid : MonoBehaviour
     private bool IsValidLocation(int x, int y)
     {
         return x >= 0 && y >= 0 && x < gridObjects.GetLength(0) && y < gridObjects.GetLength(1);
+    }
+
+    private Recipe FindMatchingRecipe(List<GridSlot> connectedSlots)
+    {
+        Dictionary<ItemType, int> itemCounts = new();
+
+        foreach(GridSlot slot in connectedSlots)
+        {
+            ItemType item = slot.Item.Item;
+
+            if(!itemCounts.ContainsKey(item))
+            {
+                itemCounts[item] = 0;
+            }
+
+            itemCounts[item]++;
+        }
+
+        // check recipes based on priority of that recipe
+        foreach(Recipe recipe in recipes.OrderByDescending(r => r.Priority))
+        {
+            bool valid = true;
+            
+            foreach(RecipeRequirement requirement in recipe.Requirements)
+            {
+                if(!itemCounts.ContainsKey(requirement.Item))
+                {
+                    valid = false;
+                    break;
+                }
+
+                if (itemCounts[requirement.Item] < requirement.Amount)
+                {
+                    valid = false;
+                    break;
+                }
+            }
+
+            if(valid)
+            {
+                return recipe;
+            }
+        }
+        return null;
     }
 }

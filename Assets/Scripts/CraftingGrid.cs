@@ -131,6 +131,20 @@ public class CraftingGrid : MonoBehaviour
         return x >= 0 && y >= 0 && x < gridObjects.GetLength(0) && y < gridObjects.GetLength(1);
     }
 
+    private bool IsCompatibleForCrafting(GridItem item1, GridItem item2)
+    {
+        if(item1 == null || item2 == null)
+        {
+            return false;
+        }
+
+        // Ores can only connect to the same ore type. (Ex: Bronze with Bronze)
+        if(item1.Craft == CraftType.Ore && item2.Craft == CraftType.Ore)
+        {
+            return item1.Item == item2.Item;
+        }
+    }
+
     private Recipe FindMatchingRecipe(List<GridSlot> connectedSlots)
     {
         Dictionary<ItemType, int> itemCounts = new();
@@ -172,6 +186,7 @@ public class CraftingGrid : MonoBehaviour
                 return recipe;
             }
         }
+
         return null;
     }
 }

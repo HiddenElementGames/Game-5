@@ -27,6 +27,8 @@ public class GridButton : MonoBehaviour
 
         Button sellButton = sellMenuInstance.GetComponent<Button>();
         sellButton.onClick.AddListener(SellItem);
+
+        sellMenuInstance.transform.SetParent(transform.parent.parent.parent, true);
     }
 
     private void SellItem()

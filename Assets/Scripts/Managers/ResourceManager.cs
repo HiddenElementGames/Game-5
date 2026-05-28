@@ -1,21 +1,13 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-
-/*
-TODO: implement the call of a 'resource placed' so that the "DayEnd" event is called upon reaching zero resources left. 
-
-
- */
-
-
 public class ResourceManager : MonoBehaviour
 {
     public static ResourceManager Instance;
 
     //private resource declarations
     private float upkeepRequired = 100; //variable to hold the 'win/lose' amount which should be changed at the end of each day.
-    private float goldAmount = 0; //holds the users gold amount.
+    private int goldAmount = 0; //holds the users gold amount.
     private int resourceCount = 0; // holds the amount of resources the user has left in each day. 
 
     void Start()
@@ -27,14 +19,14 @@ public class ResourceManager : MonoBehaviour
     {
         //subscribe to events:
         EventManager.StartListening(EventTypes.DayEnd, UpkeepCheck);
-
+        EventManager.StartListening<int>(EventTypes.AddGold, OnAddGold);
     }
 
     private void OnDisable()
     {
         //unsubscribe to events:
         EventManager.StopListening(EventTypes.DayEnd, UpkeepCheck);
-
+        EventManager.StopListening<int>(EventTypes.AddGold, OnAddGold);
     }
 
 
@@ -59,35 +51,9 @@ public class ResourceManager : MonoBehaviour
         }
     }
 
-
-
-}
-
-
-/*
- 
-This code was taken from Blockor, but I don't think we'll need a dictionary immediately. This could be implemented later on if 
-we choose to add more in, for now, just going to make a variable and track the players 'Gold' in there.
--D
-  
-public class ResourceManager : MonoBehaviour
-{
-    public static ResourceManager Instance;
-
-        // dictionary code taken from Blockor, modified for game 5.
-
-    private Dictionary<ResourceType, float> resourceAmounts =
-        new Dictionary<ResourceType, float>
-        {
-            { ShopGold, 0 }
-        };
-
-    private float upkeepRequired = 100; //variable to hold the 'win/lose' amount which should be changed at the end of each day.
-
-    void Start()
+    private void OnAddGold(int amount)
     {
-        Instance = this;
+        goldAmount += amount;
+        EventManager.Invoke(EventTypes.UpdateGoldText, goldAmount);
     }
-
 }
-*/

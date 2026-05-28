@@ -1407,7 +1407,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b082dbe0cffab694a9a4b8227b80e9ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  Raycaster: {fileID: 0}
+  Raycaster: {fileID: 390816012}
 --- !u!224 &530334156 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1839339015833358399, guid: 326ddebab99abba4187de1fdf55fc7f1, type: 3}

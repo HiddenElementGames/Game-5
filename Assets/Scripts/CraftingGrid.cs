@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using static UnityEditor.Searcher.Searcher.AnalyticsEvent;
 
 /// <summary>
@@ -10,6 +11,8 @@ using static UnityEditor.Searcher.Searcher.AnalyticsEvent;
 /// </summary>
 public class CraftingGrid : MonoBehaviour
 {
+    public GraphicRaycaster Raycaster;
+
     private GridSlot[,] gridObjects = new GridSlot[5, 5];
 
     public static CraftingGrid Instance;

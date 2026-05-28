@@ -12,15 +12,15 @@ public class UpdateGoldText : MonoBehaviour
 
     private void OnEnable()
     {
-        EventManager.StartListening<float>(EventTypes.UpdateGoldText, OnUpdateGoldText);
+        EventManager.StartListening<int>(EventTypes.UpdateGoldText, OnUpdateGoldText);
     }
 
     private void OnDisable()
     {
-        EventManager.StopListening<float>(EventTypes.UpdateGoldText, OnUpdateGoldText);
+        EventManager.StopListening<int>(EventTypes.UpdateGoldText, OnUpdateGoldText);
     }
 
-    private void OnUpdateGoldText(float amount)
+    private void OnUpdateGoldText(int amount)
     {
         goldText.text = $"Gold: {amount}";
     }

@@ -113,6 +113,7 @@ GameObject:
   - component: {fileID: 1415502149161215895}
   - component: {fileID: 7770435091722294699}
   - component: {fileID: 8848490845078792853}
+  - component: {fileID: 2664362736802270553}
   m_Layer: 5
   m_Name: Grid Slot
   m_TagString: GridSlot
@@ -237,3 +238,15 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2664362736802270553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6065648643104731626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5aa6fe2d77b0e4e4aaec886fb67fbc41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'

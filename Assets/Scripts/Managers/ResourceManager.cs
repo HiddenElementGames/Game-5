@@ -7,7 +7,7 @@ public class ResourceManager : MonoBehaviour
 
     //private resource declarations
     private float upkeepRequired = 100; //variable to hold the 'win/lose' amount which should be changed at the end of each day.
-    private float goldAmount = 0; //holds the users gold amount.
+    private int goldAmount = 0; //holds the users gold amount.
     private int resourceCount = 0; // holds the amount of resources the user has left in each day. 
 
     void Start()
@@ -19,16 +19,14 @@ public class ResourceManager : MonoBehaviour
     {
         //subscribe to events:
         EventManager.StartListening(EventTypes.DayEnd, UpkeepCheck);
-        EventManager.StartListening<float>(EventTypes.AddGold, OnAddGold);
-
+        EventManager.StartListening<int>(EventTypes.AddGold, OnAddGold);
     }
 
     private void OnDisable()
     {
         //unsubscribe to events:
         EventManager.StopListening(EventTypes.DayEnd, UpkeepCheck);
-        EventManager.StopListening<float>(EventTypes.AddGold, OnAddGold);
-
+        EventManager.StopListening<int>(EventTypes.AddGold, OnAddGold);
     }
 
 
@@ -53,9 +51,9 @@ public class ResourceManager : MonoBehaviour
         }
     }
 
-    private void OnAddGold(float amount)
+    private void OnAddGold(int amount)
     {
         goldAmount += amount;
-        EventManager.Invoke(EventTypes.UpdateGoldText, amount);
+        EventManager.Invoke(EventTypes.UpdateGoldText, goldAmount);
     }
 }

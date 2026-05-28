@@ -16,3 +16,4 @@ MonoBehaviour:
   Item: 4
   Craft: 0
   CraftItem: {fileID: 0}
+  BaseSellValue: 20

@@ -8,4 +8,5 @@ public class GridItem : ScriptableObject
 	public ItemType Item;
 	public CraftType Craft;
 	public GridItem CraftItem;
+	public int BaseSellValue;
 }

@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2267ef1f92854304bba2729a4b68cef6, type: 3}
-  m_Name: gold
+  m_Name: bronzeSpearHandle
   m_EditorClassIdentifier: Assembly-CSharp::GridItem
-  ItemSprite: {fileID: 21300000, guid: 195e1d6d481e06140b354556a7c3bef5, type: 3}
-  Item: 4
-  Craft: 0
+  ItemSprite: {fileID: 21300000, guid: 3ef5b5b8367715f4297ad620a31231b4, type: 3}
+  Item: 7
+  Craft: 2
   CraftItem: {fileID: 0}

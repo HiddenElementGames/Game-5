@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2267ef1f92854304bba2729a4b68cef6, type: 3}
-  m_Name: Temp Item
+  m_Name: goldSpearTip
   m_EditorClassIdentifier: Assembly-CSharp::GridItem
-  ItemSprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
-  Item: 0
-  Craft: 0
-  CraftItem: {fileID: 11400000, guid: a9e9d7c60e03dd047a3edb938184e41d, type: 2}
+  ItemSprite: {fileID: 21300000, guid: d9f4792a283c9df4485184f11a92bce4, type: 3}
+  Item: 25
+  Craft: 2
+  CraftItem: {fileID: 0}

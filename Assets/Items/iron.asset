@@ -16,3 +16,4 @@ MonoBehaviour:
   Item: 3
   Craft: 0
   CraftItem: {fileID: 11400000, guid: 80a6fab46f6b1c644aaecf7ec567daa6, type: 2}
+  BaseSellValue: 10

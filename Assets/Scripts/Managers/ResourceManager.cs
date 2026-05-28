@@ -56,5 +56,6 @@ public class ResourceManager : MonoBehaviour
     private void OnAddGold(float amount)
     {
         goldAmount += amount;
+        EventManager.Invoke(EventTypes.UpdateGoldText, amount);
     }
 }

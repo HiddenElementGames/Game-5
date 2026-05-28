@@ -1,5 +1,38 @@
 public enum ItemType
 {
+	//ores
 	Item1,
 	Item2,
+	bronze,
+	iron,
+	gold,
+    //weaponparts
+    bronzeDagHandle,
+    bronzeDagBlade,
+    bronzeSpearHandle,
+    bronzeSpearMid,
+    bronzeSpearTip,
+    bronzeSwordHandle,
+    bronzeSwordMid,
+    bronzeSwordTip,
+    ironDagHandle,
+    ironDagBlade,
+    ironSpearHandle,
+    ironSpearMid,
+    ironSpearTip,
+    ironSwordHandle,
+    ironSwordMid,
+    ironSwordTip,
+    goldDagHandle,
+    goldDagBlade,
+    goldSpearHandle,
+    goldSpearMid,
+    goldSpearTip,
+    goldSwordHandle,
+    goldSwordMid,
+    goldSwordTip,
+    //patterns
+    bladePattern,
+	handlePattern,
+
 }

@@ -22,7 +22,9 @@ public class CraftingGrid : MonoBehaviour
 
     void Awake()
     {
-        for(int i = 0; i < gridObjects.GetLength(0); i++)
+        Instance = this;
+
+        for (int i = 0; i < gridObjects.GetLength(0); i++)
         {
             for(int j = 0; j < gridObjects.GetLength(1); j++)
             {
@@ -31,14 +33,29 @@ public class CraftingGrid : MonoBehaviour
                 gridObjects[i, j].Y = j;
             }
         }
+    }
 
-        Instance = this;
+    private IEnumerator Start()
+    {
+        yield return null;
+        EventManager.Invoke(EventTypes.FillGrid);
+    }
+
+    public GridSlot GetSlot(int x, int y)
+    {
+        return gridObjects[x, y];
     }
 
     public GridSlot GetFreeGridSlot()
     {
         GridSlot[] freeSlots = gridObjects.Cast<GridSlot>().Where(g => g.HasItem() == false).ToArray();
         return freeSlots[Random.Range(0, freeSlots.Length)];
+    }
+
+    public void EndDay()
+    {
+        EventManager.Invoke(EventTypes.DayEnd, gridObjects);
+        Instance = null;
     }
 
     public IEnumerator CheckForCombo(GridSlot slot)

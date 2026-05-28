@@ -10,9 +10,26 @@ public class ResourceManager : MonoBehaviour
     private int goldAmount = 0; //holds the users gold amount.
     private int resourceCount = 0; // holds the amount of resources the user has left in each day. 
 
+    private List<SlotData> slots = new();
+
+    private class SlotData
+    {
+        public GridItem Item;
+        public int X;
+        public int Y;
+    }
+
     void Start()
     {
-        Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(this);
+        }
     }
 
     private void OnEnable()
@@ -20,6 +37,8 @@ public class ResourceManager : MonoBehaviour
         //subscribe to events:
         EventManager.StartListening(EventTypes.DayEnd, UpkeepCheck);
         EventManager.StartListening<int>(EventTypes.AddGold, OnAddGold);
+        EventManager.StartListening<GridSlot[,]>(EventTypes.DayEnd, OnEndDay);
+        EventManager.StartListening(EventTypes.FillGrid, OnFillGrid);
     }
 
     private void OnDisable()
@@ -27,6 +46,8 @@ public class ResourceManager : MonoBehaviour
         //unsubscribe to events:
         EventManager.StopListening(EventTypes.DayEnd, UpkeepCheck);
         EventManager.StopListening<int>(EventTypes.AddGold, OnAddGold);
+        EventManager.StopListening<GridSlot[,]>(EventTypes.DayEnd, OnEndDay);
+        EventManager.StopListening(EventTypes.FillGrid, OnFillGrid);
     }
 
 
@@ -40,6 +61,30 @@ public class ResourceManager : MonoBehaviour
             EventManager.Invoke(EventTypes.DayEnd);
         }
 
+    }
+
+    private void OnEndDay(GridSlot[,] grid)
+    {
+        foreach(GridSlot slot in grid)
+        {
+            if(slot.HasItem())
+            {
+                SlotData data = new();
+                data.X = slot.X;
+                data.Y = slot.Y;
+                data.Item = slot.Item;
+                slots.Add(data);
+            }
+        }
+    }
+
+    private void OnFillGrid()
+    {
+        foreach(SlotData slot in slots)
+        {
+            CraftingGrid.Instance.GetSlot(slot.X, slot.Y).SetItem(slot.Item);
+        }
+        slots.Clear();
     }
 
     private void UpkeepCheck() //runs at the end of the day to check that the player has the required amount of upkeep to move to the next day.

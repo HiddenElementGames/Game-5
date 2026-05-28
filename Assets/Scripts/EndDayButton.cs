@@ -13,6 +13,7 @@ public class EndDayButton : MonoBehaviour
 
     private void EndDay()
     {
+        CraftingGrid.Instance.EndDay();
         SceneManager.LoadScene(SHOP_SCENE_INDEX);
     }
 }
